@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        // TODO: Pagination by 10
+        $page = $request->input('page') * 10 - 9;
 
-        $articles = Article::all();
+        $articles = Article::orderBy("id")->limit(10)->where('id', '>=', $page)->get();
 
         $result = [
             'status' => 'success',
