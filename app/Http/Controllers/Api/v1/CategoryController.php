@@ -6,19 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+use App\Models\Category;
 use App\Models\Article;
 
-class ArticleController extends Controller
+class CategoryController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $page = $request->input('page') * 10 - 9;
-
-        $articles = Article::orderBy("id")->limit(10)->where('id', '>=', $page)->get();
+        $categories = Category::all();
 
         $result = [
             'status' => 'success',
-            'data' => $articles
+            'data' => $categories
         ];
 
         return response()
@@ -27,24 +26,24 @@ class ArticleController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $article = new Article;
+        $category = new Category;
 
-        $article->title = $request->input('title');
-        $article->text  = $request->input('text');
+        $category->title = $request->input('title');
+        $category->slug = $request->input('slug');
 
-        $article->save();
+        $category->save();
 
         $result = [
-            'status' => 'success',
+            'status' => 'success'
         ];
 
         return response()
             ->json($result);
     }
 
-    public function show($article): JsonResponse
+    public function show($category): JsonResponse
     {
-        $data = Article::find($article);
+        $data = Article::where('category', '=', $category)->get();
 
         $result = [
             'status' => 'success',
@@ -55,12 +54,12 @@ class ArticleController extends Controller
             ->json($result);
     }
 
-    public function update(Request $request, $article): JsonResponse
+    public function update(Request $request, $category): JsonResponse
     {
-        $data = Article::find($article);
+        $data = Category::find($category);
 
         $data->title = $request->input('title');
-        $data->text  = $request->input('text');
+        $data->slug = $request->input('slug');
 
         $data->save();
 
@@ -72,9 +71,9 @@ class ArticleController extends Controller
             ->json($result);
     }
 
-    public function destroy($article): JsonResponse
+    public function destroy($category): JsonResponse
     {
-        $data = Article::find($article);
+        $data = Category::find($category);
 
         $data->delete();
 

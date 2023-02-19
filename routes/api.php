@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\ArticleController as ArticleV1;
+use App\Http\Controllers\Api\v1\CategoryController as CategoryV1;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('articles/{article}', [ArticleV1::class, 'show']);
     Route::put('articles/{article}', [ArticleV1::class, 'update']);
     Route::delete('articles/{article}', [ArticleV1::class, 'destroy']);
+
+    Route::get('categories', [CategoryV1::class, 'index']);
+    Route::post('categories', [CategoryV1::class, 'store']);
+    Route::get('categories/{category}', [CategoryV1::class, 'show']);
+    Route::put('categories/{category}', [CategoryV1::class, 'update']);
+    Route::delete('categories/{category}', [CategoryV1::class, 'destroy']);
 });
